@@ -1,0 +1,18 @@
+import errno
+
+function getWords(path) {
+    if let $s = slurp(path) {
+        return s.words();
+    } else {
+        throw Err(errno::get());
+    }
+}
+
+try {
+    let words = getWords('missing_file.txt');
+    for word, count in words.tally() {
+        print("{word}: {count}");
+    }
+} catch Err(e) {
+    print("Failed to open file: {errno::str(e)}");
+}

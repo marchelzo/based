@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div class="container description">
+            <div class="row">
+                <div class="col-2"></div>
+                <div class="col-4">
+                    <h4>Ty</h4>
+                    <p>Ty is a dynamically-typed imperative programming language that aims
+                    primarily to be fun to use. Play around with the examples below to get
+                    a feel for the syntax and some of the language features.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="container playground">
+            <div class="row g-0">
+                <div class="col-2 examples">
+                    <div data-url="fizzbuzz" class="example p-1 d-flex me-3 flex-row-reverse">FizzBuzz</div>
+                    <div data-url="json" class="example p-1 d-flex me-3 flex-row-reverse">JSON</div>
+                    <div data-url="oop" class="example p-1 d-flex me-3 flex-row-reverse">OOP</div>
+                    <div data-url="except" class="example d-flex p-1 me-3 flex-row-reverse">Exception Handling</div>
+                    <div data-url="rpn" class="example d-flex p-1 me-3 flex-row-reverse">Simple RPN Calculator</div>
+                    <div data-url="mrv" class="example d-flex p-1 me-3 flex-row-reverse">Multiple Return Values</div>
+                    <div data-url="fib" class="example d-flex p-1 me-3 flex-row-reverse">Memoized Fibonacci</div>
+                    <div data-url="round_floats" class="example d-flex p-1 me-3 flex-row-reverse">Round Floats in Input</div>
+                    <div data-url="abc" class="example d-flex p-1 me-3 flex-row-reverse">ABC Problem</div>
+                </div>
+                <div class="col-7 code-container p-2">
+                    <textarea class="code" rows="20"></textarea>
+                    <button onclick="run()" type="button" class="run btn btn-primary">Run</button>
+                </div>
+                <div class="col input-container p-2">
+                    <span class="input-label">Input</span>
+                    <textarea class="input" rows="20"></textarea>
+                </div>
+            </div>
+            <div class="row g-0">
+                <div class="col-2"></div>
+                <div class="col-10 output-container p-2">
+                    <span class="output-label">Output</span>
+                    <pre class="output"></pre>
+                </div>
+            </div>
+        </div>
+        <script src="app.js">
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+    </body>
+</html>

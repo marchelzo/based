@@ -1,0 +1,5 @@
+let p = /\d+\.\d+/;
+
+while let $line = readLine() {
+    print(line.sub(p, x -> round(float(x))));
+}

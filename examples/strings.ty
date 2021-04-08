@@ -1,0 +1,3 @@
+let s = input();
+
+print(s.sub(/\d+/, m -> -int(m)));

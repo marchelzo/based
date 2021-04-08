@@ -1,0 +1,13 @@
+import os (..)
+
+let [r, w] = pipe();
+
+if (fork() == 0) {
+          close(r);
+          write(w, "Hello, world!\n");
+} else {
+          close(w);
+          let msg = blob();
+          read(r, msg, 512);
+          print("Got message from child ({pid}): {msg.str()}");
+}

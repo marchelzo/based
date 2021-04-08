@@ -1,0 +1,22 @@
+/* See http://www.rosettacode.org/wiki/ABC_problem */
+
+let blocks = [ "BO", "XK", "DQ", "CP", "NA", "GT", "RE", "TG", "QD", "FS",
+               "JW", "HU", "VI", "AN", "OB", "ER", "FS", "LY", "PC", "ZM" ];
+
+function make?(s) {
+    let bs = blocks.clone();
+
+    for c in s {
+        if let $i = bs.searchBy(b -> b.contains?(c)) {
+            bs.pop(i);
+        } else {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+for line in slurp().lines() {
+    print(make?(line.upper()));
+}

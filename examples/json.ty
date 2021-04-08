@@ -1,0 +1,8 @@
+import json
+
+let data = json::parse(slurp());
+
+data['name'] = 'Alice';
+data['numbers'].sort!();
+
+print(json::encode(data));
