@@ -1,0 +1,8 @@
+function split(s: String, i: Int = #s / 2) {
+    return s.slice(0, i), s.slice(i);
+}
+
+let left, right = split("Hello, world!");
+print("left = '{left}'\nright = '{right}'");
+
+left, right = split({1, 2, 3});

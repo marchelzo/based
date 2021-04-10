@@ -1,17 +1,17 @@
 class Rectangle {
-    init(self, w, h) {
+    init(w, h) {
         self.w = w;
         self.h = h;
     }
 
-    area(self) {
+    area() {
         return self.w * self.h;
     }
 }
 
 class Square : Rectangle {
-    init(self, w) {
-        Rectangle.init(self, w, w);
+    init(w) {
+        Rectangle.init.bind(self)(w, w);
     }
 }
 
