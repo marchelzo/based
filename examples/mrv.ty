@@ -1,7 +1,7 @@
 function splitAt(xs, i) {
-    return xs.slice(0, i), xs.slice(i);
+    return xs.slice(0, i), xs.slice(i)
 }
 
-let left, right = splitAt((1...10).list(), 4);
+let left, right = splitAt([*1...10], 4)
 
-print("left = {left}, right = {right}");
+print("left = {left}, right = {right}")

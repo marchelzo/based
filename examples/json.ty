@@ -1,8 +1,8 @@
 import json
 
-let data = json::parse(slurp());
+let data = json.parse(slurp())
 
-data['name'] = 'Alice';
-data['numbers'].sort!();
+data['name'] = 'Alice'
+data['numbers'].sort!()
 
-print(json::encode(data));
+print(json.encode(data))

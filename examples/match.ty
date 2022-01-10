@@ -1,21 +1,21 @@
-let tokens = slurp().words().reverse();
-let stack = [];
+let tokens = slurp().words().reverse()
+let stack = []
 
 while (tokens) {
-    let t = tokens.pop();
+    let t = tokens.pop()
     match t {
-        /\d+/ => { stack.push(int(t)); },
+        /\d+/ => { stack.push(int(t)) },
         c     => {
-            let a = stack.pop();
-            let b = stack.pop();
+            let a = stack.pop()
+            let b = stack.pop()
             stack.push(match c {
                 '+' => a + b,
                 '-' => b - a,
                 '*' => a * b,
                 '/' => b / a
-            });
+            })
         }
     }
 }
 
-print(stack.pop());
+print(stack.pop())

@@ -1,8 +1,9 @@
 function split(s: String, i: Int = #s / 2) {
-    return s.slice(0, i), s.slice(i);
+    return s.slice(0, i), s.slice(i)
 }
 
-let left, right = split("Hello, world!");
-print("left = '{left}'\nright = '{right}'");
+// Good.
+let left, right = split("Hello, world!")
 
-left, right = split({1, 2, 3});
+// Bad. s must be a string!
+left, right = split({1, 2, 3})

@@ -2,17 +2,22 @@ import errno
 
 function getWords(path) {
     if let $s = slurp(path) {
-        return s.words();
+        return s.matches(/\w+/)
     } else {
-        throw Err(errno::get());
+        throw Err(errno.get())
+    }
+}
+
+function printWords(path) {
+    let words = getWords(path);
+    for word, count in words.tally() {
+        print("{word}: {count}")
     }
 }
 
 try {
-    let words = getWords('missing_file.txt');
-    for word, count in words.tally() {
-        print("{word}: {count}");
-    }
+    printWords('examples/except.ty')
+    printWords('missing_file.txt')
 } catch Err(e) {
-    print("Failed to open file: {errno::str(e)}");
+    print("Failed to open file: {errno.str(e)}")
 }

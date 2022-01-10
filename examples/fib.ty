@@ -1,7 +1,7 @@
-let memo = { 0: 1, 1: 1, *: fib($ - 1) + fib($ - 2) };
+let memo = { 0: 1, 1: 1, *: fib(_1 - 1) + fib(_1 - 2) }
 
-function fib(n) {
-    return memo[n];
+function fib(n) { memo[n] }
+
+for n in 1...15 {
+    print("fib({n}) = {fib(n)}")
 }
-
-for n in 1...15 { print("fib({n}) = {fib(n)}"); }

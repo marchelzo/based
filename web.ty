@@ -18,7 +18,8 @@ let c = FCGIApp(s);
 while let $r = c.waitRequest() {
     print(r);
     print(r.params);
-    if (r.params['REQUEST_METHOD'] == 'POST') {
+
+    if r.params['REQUEST_METHOD'] == 'POST' {
         let data = r.formData();
         print('data', data);
         sh('cat > body', data['code']);
