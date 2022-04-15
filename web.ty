@@ -1,34 +1,36 @@
 import os (..)
 import fcgi (..)
-import json (encode)
+import json
 import sh (sh)
 
-let s = socket(AF_UNIX, SOCK_STREAM, 0);
-let path = '/var/run/ty/tyfcgi.sock';
+let s = socket(AF_UNIX, SOCK_STREAM, 0)
+let path = '/var/run/ty/tyfcgi.sock'
 
-unlink(path);
-umask(0);
-let r = bind(s, { 'family': AF_UNIX, 'path': path });
-print("bind(): {r}");
-r = listen(s, 3);
-print("listen(): {r}");
+unlink(path)
+umask(0)
 
-let c = FCGIApp(s);
+let r = bind(s, { family: AF_UNIX, path: path })
+print("bind(): {r}")
 
-while let $r = c.waitRequest() {
-    print(r);
-    print(r.params);
+let r = listen(s, 3)
+print("listen(): {r}")
 
-    if r.params['REQUEST_METHOD'] == 'POST' {
-        let data = r.formData();
-        print('data', data);
-        sh('cat > body', data['code']);
-        let output = sh('tysafe body 2>&1', data['input']);
-        r.sendResponse(0, "Content-Type: text/plain\r\n\r\n{output}\r\n");
+let c = FCGIApp(s)
+
+while let $req = c.waitRequest() {
+    print(req)
+    print(req.params)
+
+    if req.params['REQUEST_METHOD'] == 'POST' {
+        let data = req.formData()
+        print('data', data)
+        sh('cat > body', data['code'])
+        let output = sh('tysafe body 2>&1', data['input'], timeoutMs: 300) ?? '[Timed Out]'
+        req.sendResponse(0, "Content-Type: text/plain\r\n\r\n{output}\r\n")
     } else {
-        let script = 'examples' + r.params['SCRIPT_NAME'];
-        let input = script.sub('.ty', '.in');
-        let output = encode({ 'code': slurp(script), 'input': slurp(input)});
-        r.sendResponse(0, "Content-Type: application/json\r\n\r\n{output}\r\n");
+        let script = 'examples' + req.params['SCRIPT_NAME']
+        let input = script.sub('.ty', '.in')
+        let output = json.encode({code: slurp(script), input: slurp(input)})
+        req.sendResponse(0, "Content-Type: application/json\r\n\r\n{output}\r\n")
     }
 }

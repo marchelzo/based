@@ -1,6 +1,6 @@
 class Rectangle {
     area() {
-        return self.w * self.h
+        @w * @h
     }
 }
 

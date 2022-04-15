@@ -1,5 +1,5 @@
-let p = /\d+\.\d+/
+let pattern = /\d+\.\d+/
 
 while let $line = readLine() {
-    print(line.sub(p, float |> round))
+    print(line.sub(pattern, float |> round))
 }

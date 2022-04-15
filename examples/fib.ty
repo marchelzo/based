@@ -1,7 +1,15 @@
-let memo = { 0: 1, 1: 1, *: fib(_1 - 1) + fib(_1 - 2) }
+let memo = %{ *: fib(it) }
 
-function fib(n) { memo[n] }
+function fib(n) {
+    match n {
+        0 => 1,
+        1 => 1,
+        _ => memo[n - 1] + memo[n - 2]
+    }
+}
 
 for n in 1...15 {
     print("fib({n}) = {fib(n)}")
 }
+
+
