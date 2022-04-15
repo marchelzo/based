@@ -18,19 +18,21 @@ print("listen(): {r}")
 let c = FCGIApp(s)
 
 while let $req = c.waitRequest() {
-    print(req)
-    print(req.params)
+    Thread((req) -> {
+        print(req)
+        print(req.params)
 
-    if req.params['REQUEST_METHOD'] == 'POST' {
-        let data = req.formData()
-        print('data', data)
-        sh('cat > body', data['code'])
-        let output = sh('tysafe body 2>&1', data['input'], timeoutMs: 300) ?? '[Timed Out]'
-        req.sendResponse(0, "Content-Type: text/plain\r\n\r\n{output}\r\n")
-    } else {
-        let script = 'examples' + req.params['SCRIPT_NAME']
-        let input = script.sub('.ty', '.in')
-        let output = json.encode({code: slurp(script), input: slurp(input)})
-        req.sendResponse(0, "Content-Type: application/json\r\n\r\n{output}\r\n")
-    }
+        if req.params['REQUEST_METHOD'] == 'POST' {
+            let data = req.formData()
+            print('data', data)
+            sh('cat > body', data['code'])
+            let output = sh('tysafe body 2>&1', data['input'], timeoutMs: 5000) ?? '[Timed Out]'
+            req.sendResponse(0, "Content-Type: text/plain\r\n\r\n{output}\r\n")
+        } else {
+            let script = 'examples' + req.params['SCRIPT_NAME']
+            let input = script.sub('.ty', '.in')
+            let output = json.encode({code: slurp(script), input: slurp(input)})
+            req.sendResponse(0, "Content-Type: application/json\r\n\r\n{output}\r\n")
+        }
+    }, req)
 }
