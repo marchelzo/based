@@ -1,38 +1,91 @@
 import os (..)
 import fcgi (..)
-import json
 import sh (sh)
+import tp (..)
+import io
+import log (..)
+import sqlite (..)
 
 let s = socket(AF_UNIX, SOCK_STREAM, 0)
 let path = '/var/run/ty/tyfcgi.sock'
 
-unlink(path)
-umask(0)
-
-let r = bind(s, { family: AF_UNIX, path: path })
-print("bind(): {r}")
-
-let r = listen(s, 3)
-print("listen(): {r}")
+dbg!(unlink(path))
+dbg!(umask(0))
+dbg!(bind(s, { family: AF_UNIX, path: path }))
+dbg!(listen(s, 32))
 
 let c = FCGIApp(s)
+let db = SQLite('ty.db', fullMutex: true)
 
-while let $req = c.waitRequest() {
-    Thread((req) -> {
-        print(req)
-        print(req.params)
+logLevel!(INFO)
 
-        if req.params['REQUEST_METHOD'] == 'POST' {
+let pool = ThreadPool(4, function (req) {
+    info!(req.params)
+
+    if req.params['REQUEST_METHOD'] == 'POST' {
+        if req.params['SCRIPT_NAME'] == '/run.ty' {
             let data = req.formData()
-            print('data', data)
-            sh('cat > body', data['code'])
-            let output = sh('tysafe body 2>&1', data['input'], timeoutMs: 5000) ?? '[Timed Out]'
-            req.sendResponse(0, "Content-Type: text/plain\r\n\r\n{output}\r\n")
+
+            info!(data)
+
+            with f = io.open('body', 'w+') {
+                if !data['code'].match?(/^import/) {
+                    f.write('''
+                    import ffi as c (C!)
+                    import json
+                    import bit
+                    import cutil (..)
+                    import os (..)
+                    import tp (ThreadPool)
+                    import ety
+                    import ty
+
+                    ''')
+                }
+                f.write(data['code'])
+            }
+
+            let output, info = sh('tysafe body', data['input'], combineOutput: true, timeoutMs: 5000)
+
+            if info.status == 0 && output == '' {
+                let output, info = sh('tysafe -p body', data['input'], combineOutput: true, timeoutMs: 5000)
+            }
+
+            if info.signal != nil && info.signal != SIGKILL {
+                output = strsignal(info.signal)
+            }
+
+            req.sendResponse(200, output, [('Content-Type', 'text/plain')])
+        } else if req.params['SCRIPT_NAME'] == '/share.ty' {
+            let data = req.formData()
+            let q = db.query('insert into progs values (?, ?) returning rowid', data['code'], data['input'])
+            if let [n] = q.nextRow(assoc: false) {
+                q.finalize()
+                req.sendResponse(200, "https://based.lol/?{n}")
+            } else {
+                req.sendResponse(500)
+            }
         } else {
-            let script = 'examples' + req.params['SCRIPT_NAME']
-            let input = script.sub('.ty', '.in')
-            let output = json.encode({code: slurp(script), input: slurp(input)})
-            req.sendResponse(0, "Content-Type: application/json\r\n\r\n{output}\r\n")
+            req.sendResponse(400)
         }
-    }, req)
+    } else {
+        let name = req.params['SCRIPT_NAME']
+        if name.match?(/^\/\d+\.ty$/) {
+            let q = db.query('select * from progs where rowid = ?', name.match!(/\d+/))
+            if let [code, input] = q.nextRow(assoc: false) {
+                warn!({code, input})
+                req.sendJSON({code: code.comb(/\r/), input: input.comb(/\r/)})
+            } else {
+                req.sendResponse(404)
+            }
+        } else {
+            let script = 'examples' + name
+            let input = script.sub('.ty', '.in')
+            req.sendJSON({code: slurp(script), input: slurp(input)})
+        }
+    }
+})
+
+for req in c.run() {
+    pool.submit(req)
 }

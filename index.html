@@ -1,57 +1,52 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
-        <link rel="stylesheet" href="style.css">
-    </head>
-    <body>
-        <div class="container description">
-            <div class="row">
-                <div class="col-2"></div>
-                <div class="col-4">
-                    <h4>Ty</h4>
-                    <p>Ty is a dynamically-typed imperative programming language that aims
-                    primarily to be fun to use. Play around with the examples below to get
-                    a feel for the syntax and some of the language features.
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="container playground">
-            <div class="row g-0">
-                <div class="col-2 examples">
-                    <div data-url="fizzbuzz" class="example p-1 d-flex me-3 flex-row-reverse">FizzBuzz</div>
-                    <div data-url="constraints" class="example p-1 d-flex me-3 flex-row-reverse">Parameter Constraints</div>
-                    <div data-url="generator" class="example p-1 d-flex me-3 flex-row-reverse">Generators</div>
-                    <div data-url="json" class="example p-1 d-flex me-3 flex-row-reverse">JSON</div>
-                    <div data-url="oop" class="example p-1 d-flex me-3 flex-row-reverse">OOP</div>
-                    <div data-url="except" class="example d-flex p-1 me-3 flex-row-reverse">Exception Handling</div>
-                    <div data-url="rpn" class="example d-flex p-1 me-3 flex-row-reverse">Simple RPN Calculator</div>
-                    <div data-url="mrv" class="example d-flex p-1 me-3 flex-row-reverse">Multiple Return Values</div>
-                    <div data-url="fib" class="example d-flex p-1 me-3 flex-row-reverse">Memoized Fibonacci</div>
-                    <div data-url="round_floats" class="example d-flex p-1 me-3 flex-row-reverse">Round Floats in Input</div>
-                    <div data-url="abc" class="example d-flex p-1 me-3 flex-row-reverse">ABC Problem</div>
-                </div>
-                <div class="col-7 code-container p-2">
-                    <textarea class="code" rows="20"></textarea>
-                    <button onclick="run()" type="button" class="run btn btn-primary">Run</button>
-                </div>
-                <div class="col input-container p-2">
-                    <span class="input-label">Input</span>
-                    <textarea class="input" rows="20"></textarea>
-                </div>
-            </div>
-            <div class="row g-0">
-                <div class="col-2"></div>
-                <div class="col-10 output-container p-2">
-                    <span class="output-label">Output</span>
-                    <pre class="output"></pre>
-                </div>
-            </div>
-        </div>
-        <script src="app.js">
-        </script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
-    </body>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Ty</title>
+	<link rel="stylesheet" href="dist/output.css">
+</head>
+<body class="bg-slate-300">
+	<div class="container mx-auto">
+		<header class="bg-slate-700 p-20">
+			<div class="max-w-3xl mx-auto">
+				<h1 class="text-3xl text-amber-300 text-center font-black mb-6">Ty</h1>
+				<p class="text-slate-200">Ty is a dynamically-typed imperative programming language that aims primarily to be fun to use. Play around with the examples below to get a feel for the syntax and some of the language features. This website is powered by Ty using <a class="underine font-medium text-amber-300" href="https://raw.githubusercontent.com/marchelzo/ty/master/lib/fcgi.ty">FastCGI</a>!</p>
+			</div>
+		</header>
+		<section>
+			<div class="max-h-screen h-[40rem] grid py-16 gap-2 lg:max-w-7xl lg:mx-auto">
+				<ul class="bg-slate-700 text-slate-200 lg:rounded-md md:overflow-y-auto">
+					<li data-url="fizzbuzz" class="p-2 example">FizzBuzz</li>
+					<li data-url="ffi" class="p-2 example">C FFI</li>
+					<li data-url="threads" class="p-2 example">Threads</li>
+					<li data-url="json" class="p-2 example">JSON</li>
+					<li data-url="generator" class="p-2 example">Generators</li>
+					<li data-url="docstring" class="p-2 example">Docstring Syntax</li>
+					<li data-url="except" class="p-2 example">Exception Handling</li>
+					<li data-url="constraints" class="p-2 example">Parameter Constraints</li>
+					<li data-url="macros" class="p-2 example">Macros</li>
+					<li data-url="rpn" class="p-2 example">RPN Calculator</li>
+					<li data-url="fib" class="p-2 example">Memoized Fibonacci</li>
+					<li data-url="round_floats" class="p-2 example">Round Floats in Input</li>
+				</ul>
+				<div class="relative code-container h-full">
+					<div spellcheck="false" id="editor" class="code w-full md:h-full h-[32rem]"></div>
+					<div class="hidden bg-slate-800 text-slate-100 p-2 py-6 output-container h-[32rem] w-full overflow-y-auto"><pre class="h-full"><code class="output h-full"></code></pre></div>
+					<button class="absolute ring-yellow-400 text-sm font-medium rounded bg-yellow-500 px-3 py-1.5 ring-2 bottom-3 right-6" onclick="run()">Run</button>
+					<button class="absolute ring-blue-400 text-sm font-medium rounded bg-blue-500 px-3 py-1.5 ring-2 bottom-3 right-10" onclick="share()">Share</button>
+					<span class="text-slate-600/40 block absolute top-0 right-5 label"></span>
+				</div>
+				<div class="relative">
+					<textarea spellcheck="false" class="w-full h-full input bg-gray-100"></textarea>
+					<span class="text-slate-600/40 block absolute top-0 right-1">stdin</span>
+				</div>
+			</div>
+		</section>
+	</div>
+	<script src="ace-builds/src-min-noconflict/ace.js" type="text/javascript"></script>
+	<script src="ace-builds/src-min-noconflict/theme-one_dark.js" type="text/javascript"></script>
+	<script src="ace-builds/src-min-noconflict/mode-javascript.js" type="text/javascript"></script>
+	<script src="app2.js" type="text/javascript"></script>
+</body>
 </html>
